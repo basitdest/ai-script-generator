@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Script Generator — Demo</title>
+  <style>
+    body{font-family: Inter, system-ui, -apple-system, sans-serif;padding:36px;background:#f7fafc;color:#0f172a}
+    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+    textarea{width:100%;height:160px}
+    pre{background:#0b1220;color:#cbd5e1;padding:12px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="card" style="max-width:900px;margin:0 auto">
+    <h1>AI Script Generator — Demo</h1>
+    <p>This static demo shows how natural-language turns into code. For a live runnable demo, deploy the backend (FastAPI + OpenAI) and the frontend Streamlit app.</p>
+    <textarea id="prompt">Fetch the last OTP email and store in a text file.</textarea>
+    <p><button onclick="generate()">Generate (demo)</button></p>
+    <h3>Generated (simulated)</h3>
+    <pre id="out">// This is a demo preview you can host on GitHub Pages. It does not execute code.</pre>
+  </div>
+  <script>
+    function generate(){
+      const p = document.getElementById('prompt').value;
+      // very small simulated generation
+      document.getElementById('out').innerText = `# Simulated Generation for: ${p}\n\n# (Demo only)\nprint(\"This script would save the OTP to /tmp/otp.txt\")`;
+    }
+  </script>
+</body>
+</html>
