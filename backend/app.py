@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from openai_client import generate_script
+from backend.model_client import generate_script
 from sandbox_runner import run_python_script, run_powershell_script
 import os
 
