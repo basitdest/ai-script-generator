@@ -1,32 +1,26 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from backend.model_client import generate_script
-from sandbox_runner import run_python_script, run_powershell_script
-import os
+import streamlit as st
+from model_client import generate_script
 
-app = FastAPI()
+st.set_page_config(page_title="AI Script Generator", page_icon="🤖", layout="wide")
 
-class GenRequest(BaseModel):
-    prompt: str
-    language: str = 'python'  # or 'powershell'
-    run: bool = False
+st.title("🤖 AI-Powered Script Generator")
+st.markdown("Turn natural language into working automation scripts instantly.")
 
-@app.post('/generate')
-async def generate(req: GenRequest):
-    if not req.prompt or len(req.prompt) < 3:
-        raise HTTPException(400, 'Prompt is too short')
-    res = generate_script(req.prompt, language=req.language)
-    if res['safety_issues']:
-        return {"ok": False, "error": "Safety checks failed", "safety_issues": res['safety_issues'], "raw": res['raw']}
+st.markdown("### 1️⃣ Describe what you want your script to do")
+prompt = st.text_area(
+    "Your task:",
+    placeholder="Example: Fetch the last OTP email and store it in a text file.",
+    height=100,
+)
 
-    run_output = None
-    if req.run:
-        # Only allow local run if environment variable enabled
-        if os.getenv('ALLOW_LOCAL_RUN', 'false').lower() != 'true':
-            return {"ok": False, "error": "Local run disabled on server (security)."}
-        if req.language.lower().startswith('py'):
-            run_output = run_python_script(res['code'])
-        else:
-            run_output = run_powershell_script(res['code'])
+st.markdown("### 2️⃣ Choose output language")
+language = st.selectbox("Script language:", ["Python", "PowerShell", "Bash", "JavaScript"])
 
-    return {"ok": True, "code": res['code'], "meta": res['meta'], "run_output": run_output}
+if st.button("⚡ Generate Script", use_container_width=True):
+    if not prompt.strip():
+        st.warning("Please enter a task description first.")
+    else:
+        with st.spinner("Generating your script..."):
+            output = generate_script(prompt, language.lower())
+        st.markdown("### 🧠 AI-Generated Script")
+        st.markdown(output)
