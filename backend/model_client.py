@@ -1,33 +1,17 @@
-import os
-import requests
-import logging
+import requests, json
 
-# Toggle between local Ollama or Hugging Face API
-USE_OLLAMA = True
+OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
+MODEL_NAME = "codellama:7b"
 
-# Hugging Face config (optional)
-HF_API_KEY = os.getenv("HF_API_KEY")
-HF_MODEL = os.getenv("HF_MODEL", "HuggingFaceH4/zephyr-7b-beta")
-HF_BASE_URL = os.getenv("HF_BASE_URL", "https://api-inference.huggingface.co/models")
-
-# Ollama endpoint
-OLLAMA_URL = "http://localhost:11434/api/generate"
-
-
-def generate_script(prompt: str, language: str = "python") -> str:
-    """
-    Generate a structured AI response with:
-    - Problem statement
-    - Libraries required
-    - Script code
-    - Explanation
-    """
-
-    system_prompt = f"""
-You are an expert automation engineer. When asked to generate a script, always respond in this exact structured format:
-
-**Problem:** <2-3 lines summary of the task>
-**Tech Used:** <language + libraries>
-**Script:**
-```{language}
-# code here
+def generate_script(prompt, language="Python"):
+    payload = {
+        "model": MODEL_NAME,
+        "prompt": f"Generate a {language} script for:\n{prompt}"
+    }
+    response = requests.post(OLLAMA_URL, json=payload, stream=True)
+    output = ""
+    for line in response.iter_lines():
+        if line:
+            data = json.loads(line.decode("utf-8"))
+            output += data.get("response", "")
+    return output
