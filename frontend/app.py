@@ -4,7 +4,7 @@ import json
 import os
 
 # ---------------- CONFIG ----------------
-OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
+OLLAMA_URL = "https://nonvigilant-rubie-nondynamically.ngrok-free.dev/api/generate"
 OLLAMA_MODEL = "codellama:7b"
 
 # Small free model from Hugging Face for online demo
