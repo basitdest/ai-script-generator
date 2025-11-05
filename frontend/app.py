@@ -104,4 +104,3 @@ if st.button("🚀 Generate Script"):
                 file_name=f"generated_{language.lower()}.txt",
                 mime="text/plain",
             )
-```
