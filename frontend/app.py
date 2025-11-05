@@ -19,13 +19,6 @@ HF_BASE_URL = os.getenv("HF_BASE_URL", "")
 HF_TOKEN = os.getenv("HF_API_KEY", "")
 # ----------------------------------------
 
-st.set_page_config(page_title="🤖 AI Script Generator", layout="centered")
-st.title("🤖 AI-Powered Script Generator")
-st.markdown("Generate **Python** or **PowerShell** scripts from natural language using AI models.")
-
-language = st.selectbox("Select script language:", ["Python", "PowerShell"])
-prompt = st.text_area("🧠 Describe your task:", placeholder="e.g. Fetch the last OTP email and save it in a text file...")
-
 
 HF_API_URL = f"{HF_BASE_URL.rstrip('/')}/{HF_MODEL}"
 
